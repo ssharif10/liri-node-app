@@ -51,6 +51,14 @@ client.get('statuses/user_timeline', params, function(error, tweets, response) {
   if (!error) {
     console.log(tweets);
   } else console.log(error);
+
+  for(var i = 0; i < tweets.length; 1++) {
+  	console.log(
+  		results[i] = 
+  		"This tweet was created at: " + tweets[i].created_at + 
+  		"The text of this tweet is: " + tweets[i].text);
+  }
+
 });
 
 
@@ -77,8 +85,52 @@ funtion movieThis () {
 		searchCriterion = "Mr. Nobody";
 	}
 
-	request("http://www.omdbapi.com/?t=" + searchCriterion + "apikey=[40e9cece]&" , function (error, response, body) {
+	request("http://www.omdbapi.com/?t=" + searchCriterion + "&y=&plot=short&apikey=40e9cece" , function (error, response, body) {
+
+  // If the request is successful 
+  if (!error && response.statusCode === 200) {
+
+    // Parse the body of object
+    console.log("The movie's title is: " + JSON.parse(body).imdbTitle;)
+    console.log("The movie's release year is: " + JSON.parse(body).Year);
+    console.log("The movie's IMDB rating is: " + JSON.parse(body).imdbRating);
+    console.log("The movie's Rotten tomato rating is: " + JSON.parse(body).tomatoRating);
+    console.log("The movie's country is: " + JSON.parse(body).Country);
+    console.log("The movie's language is: " + JSON.parse(body).Language);
+    console.log("The movie's plot is: " + JSON.parse(body).Plot);
+    console.log("The movie's actors are: " + JSON.parse(body).Actors);
+
+  }
+});
   console.log('error:', error); 
+
+
+
+
+
+/////////Do what it says section/////////
+function doWhatItSays () {
+
+fs.readFile("random.txt", "utf8", function(err, data) {
+
+  //log any errors
+  if (err) {
+    return console.log(err);
+  }
+
+  console.log(data);
+
+  var infoArr = data.split(",");
+
+  // We will then re-display the content as an array for later use.
+  console.log(infoArr);
+
+  }
+
+});
+
+
+
 
 
 
