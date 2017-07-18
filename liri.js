@@ -44,12 +44,7 @@ switch (userInput) {
 // Then use the Twitter npm package-provided code to query API. Twitter key value already stored in global variable 
 
 function myTweets() {
-var client = new Twitter({
-  consumer_key: keys.twitterKeys.consumer_key,
-  consumer_secret: keys.twitterKeys.consumer_secret,
-  access_token_key: keys.twitterKeys.access_token_key,
-  access_token_secret: keys.twitterKeys.access_token_secret
-});
+var client = new Twitter(twitterKeyListing);
  
 var params = {screen_name: 'FSTechFriend'};
 client.get('statuses/user_timeline', params, function(error, tweets, response) {
@@ -57,7 +52,34 @@ client.get('statuses/user_timeline', params, function(error, tweets, response) {
     console.log(tweets);
   } else console.log(error);
 });
-};
 
 
-//////////////Spotify Section/////////////////////
+/////////Spotify Section///////
+
+function spotifyThisSong () {
+	if (searchCriterion == null) {
+		searchCriterion = "The Sign, Ace of Base";
+	}
+var spotify = new Spotify(spotifyKeyListing);
+ 
+spotify.search({ type: 'track', query: searchCriterion }, function(err, data) {
+  if (err) {
+    return console.log('Error occurred: ' + err);
+  }
+ 
+console.log(data); 
+});
+
+////////////OMDB Section//////
+
+funtion movieThis () {
+	if (searchCriterion == null) {
+		searchCriterion = "Mr. Nobody";
+	}
+
+	request("http://www.omdbapi.com/?t=" + searchCriterion + "apikey=[40e9cece]&" , function (error, response, body) {
+  console.log('error:', error); 
+
+
+
+
