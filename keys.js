@@ -1,5 +1,6 @@
 console.log('this is loaded');
 
+//These keys are objects and we have to specify what values we want from those objects
 exports.twitterKeys = {
   consumer_key: 'wanYBTjWMSCq3opgiojvHmJfk',
   consumer_secret: 'UeCjAOlFd99Y0wAMUGtu7wKyAlqUSDj4kxDpyHfoCe6dDWiBZR',
