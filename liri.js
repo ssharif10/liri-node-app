@@ -80,7 +80,7 @@ console.log(data);
 
 ////////////OMDB Section//////
 
-funtion movieThis () {
+function movieThis () {
 	if (searchCriterion == null) {
 		searchCriterion = "Mr. Nobody";
 	}
