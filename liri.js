@@ -1,6 +1,6 @@
 // Here we require our keys from keys.js
 var keys = require("./keys.js");
-
+var fs = require("fs");
 
 // store requirements in a variable
 var Twitter = require("twitter");
@@ -37,7 +37,7 @@ switch (userInput) {
 	break;
 
 	case "do-what-it-says":
-	spotifyThisSong();
+	doWhatItSays();
 	break;
 }
 
@@ -49,20 +49,22 @@ var client = new Twitter(twitterKeyListing);
 var params = {screen_name: 'FSTechFriend'};
 client.get('statuses/user_timeline', params, function(error, tweets, response) {
   if (!error) {
-    console.log(tweets);
+    // console.log(tweets);
   } else console.log(error);
 
-  for(var i = 0; i < tweets.length; 1++) {
+  ///created for loop to go through each tweet and pull out specified information
+
+  for(var i = 0; i < tweets.length; i++) {
   	console.log(
   		results[i] = 
-  		"This tweet was created at: " + tweets[i].created_at + 
-  		"The text of this tweet is: " + tweets[i].text);
-  }
-
+  		"This tweet was created at: " + tweets[i].created_at + "\r\n"+
+  		"The text of this tweet is: " + tweets[i].text);   
+  } 
+  appendToLog();
 });
 
-
-/////////Spotify Section///////
+}
+// /////////Spotify Section///////
 
 function spotifyThisSong () {
 	if (searchCriterion == null) {
@@ -73,42 +75,61 @@ var spotify = new Spotify(spotifyKeyListing);
 spotify.search({ type: 'track', query: searchCriterion }, function(err, data) {
   if (err) {
     return console.log('Error occurred: ' + err);
-  }
- 
-console.log(data); 
-});
+  } else {
 
-////////////OMDB Section//////
+var songData = data.tracks.items[0]; 
+results = 
+  "Artist: " + songData.artists[0].name + "\r\n" + 
+  "Song Name: " + songData.name + "\r\n" +
+  "Preview Link: " + songData.preview_url + "\r\n" + 
+  "Album Name: " + songData.album.name; 
+  console.log(results);
+  appendToLog();
+}
+
+});
+}
+
+// ////////////OMDB Section//////
 
 function movieThis () {
 	if (searchCriterion == null) {
 		searchCriterion = "Mr. Nobody";
 	}
 
-	request("http://www.omdbapi.com/?t=" + searchCriterion + "&y=&plot=short&apikey=40e9cece" , function (error, response, body) {
+	request("http://www.omdbapi.com/?t=" + searchCriterion + "&y=&plot=short&apikey=40e9cece&tomatoes=true&r=json" , function (error, response, body) {
 
   // If the request is successful 
   if (!error && response.statusCode === 200) {
 
+      var movieData = JSON.parse(body);
+      //console.log(movieData);
+
     // Parse the body of object
-    console.log("The movie's title is: " + JSON.parse(body).imdbTitle;)
-    console.log("The movie's release year is: " + JSON.parse(body).Year);
-    console.log("The movie's IMDB rating is: " + JSON.parse(body).imdbRating);
-    console.log("The movie's Rotten tomato rating is: " + JSON.parse(body).tomatoRating);
-    console.log("The movie's country is: " + JSON.parse(body).Country);
-    console.log("The movie's language is: " + JSON.parse(body).Language);
-    console.log("The movie's plot is: " + JSON.parse(body).Plot);
-    console.log("The movie's actors are: " + JSON.parse(body).Actors);
-
-  }
-});
+   results = 
+    "The movie's title is: " + movieData.Title + "\r\n" + 
+    "The movie's release year is: " + movieData.Year + "\r\n" + 
+    "The movie's IMDB rating is: " + movieData.imdbRating + "\r\n" + 
+    "The movie's Rotten tomato rating is: " + movieData.tomatoRating + "\r\n" + 
+    "The movie's country is: " + movieData.Country + "\r\n" + 
+    "The movie's language is: " + movieData.Language + "\r\n" + 
+    "The movie's plot is: " + movieData.Plot + "\r\n" + 
+    "The movie's actors are: " + movieData.Actors + "\r\n";
+     console.log(results);
+     appendToLog();
+  
+  } else {
   console.log('error:', error); 
+  }
+
+});
+  
+}
 
 
 
 
-
-/////////Do what it says section/////////
+// /////////Do what it says section/////////
 function doWhatItSays () {
 
 fs.readFile("random.txt", "utf8", function(err, data) {
@@ -116,22 +137,31 @@ fs.readFile("random.txt", "utf8", function(err, data) {
   //log any errors
   if (err) {
     return console.log(err);
-  }
+  
+  } else {
 
-  console.log(data);
-
+  //splits text from random.txt into an array
   var infoArr = data.split(",");
 
-  // We will then re-display the content as an array for later use.
-  console.log(infoArr);
+  //we want infoArr at index 1 which is the song title to spotify
+  searchCriterion = infoArr[1];
+  spotifyThisSong();
+  appendToLog();
 
-  }
+    }
+  });
+}
 
-});
+///////////Bonus//////////////
+function appendToLog () {
 
+fs.appendFile("log.txt", results + "\r\n", function(err, data) {
 
-
-
-
-
+  //log any errors
+  if (err) {
+    return console.log(err);
+  
+  } 
+  });
+}
 
