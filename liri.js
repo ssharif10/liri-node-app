@@ -46,7 +46,7 @@ switch (userInput) {
 function myTweets() {
 var client = new Twitter(twitterKeyListing);
  
-var params = {screen_name: 'FSTechFriend'};
+var params = {screen_name: 'username'};
 client.get('statuses/user_timeline', params, function(error, tweets, response) {
   if (!error) {
     // console.log(tweets);
